@@ -86,8 +86,8 @@ const App = (() => {
   }
 
   function init(){
-    // 手机端默认折叠为窄栏（避免遮挡内容）；桌面端默认展开，恢复折叠偏好
-    const collapsed = isMobile() ? true : U.store.get('navCollapsed',false);
+    // 电脑、手机均默认折叠为窄图标栏，不默认展开；已保存的偏好仍生效
+    const collapsed = U.store.get('navCollapsed', true);
     $('#nav').classList.toggle('collapsed',collapsed);
     renderNav();
     render('home');
