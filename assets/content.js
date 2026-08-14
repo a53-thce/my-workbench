@@ -135,14 +135,14 @@ const C = (() => {
   // 穿搭/妆容 参考视频（抖音博主示例）
   const BEAUTY = {
     makeup:[
-      {t:'瓜子脸/圆脸 通勤妆',s:'日常通勤 · 自然裸妆感',src:'抖音 @陈圆圆超可爱',col:'💄',url:'https://www.douyin.com/search/陈圆圆超可爱%20通勤妆'},
-      {t:'日常淡妆教程',s:'清透伪素颜',src:'抖音 @一一只是黑猫',col:'💄',url:'https://www.douyin.com/search/一一只是黑猫%20淡妆'},
-      {t:'约会甜美妆',s:'粉嫩元气 · 约会必看',src:'抖音 @麻辣烫',col:'💄',url:'https://www.douyin.com/search/麻辣烫%20约会妆'},
+      {t:'瓜子脸/圆脸 通勤妆',s:'日常通勤 · 自然裸妆感',col:'💄',ref:'抖音 @陈圆圆超可爱',bvid:'BV1Bm421M7EL',url:'https://www.bilibili.com/video/BV1Bm421M7EL'},
+      {t:'日常淡妆教程',s:'清透伪素颜',col:'💄',ref:'抖音 @一一只是黑猫',bvid:'BV1NqMMzzEbE',url:'https://www.bilibili.com/video/BV1NqMMzzEbE'},
+      {t:'约会甜美妆',s:'粉嫩元气 · 约会必看',col:'💄',ref:'抖音 @麻辣烫',bvid:'BV1Yd4y1T7BY',url:'https://www.bilibili.com/video/BV1Yd4y1T7BY'},
     ],
     dress:[
-      {t:'小个显高穿搭',s:'上短下长 · 同色系延伸',src:'抖音 @一一只是黑猫',col:'👗',url:'https://www.douyin.com/search/一一只是黑猫%20小个显高'},
-      {t:'甜酷日常风',s:'扬长避短搭配思路',src:'抖音 @麻辣烫',col:'👗',url:'https://www.douyin.com/search/麻辣烫%20甜酷穿搭'},
-      {t:'圆脸显瘦发型妆容',s:'修饰脸型',src:'抖音 @陈圆圆超可爱',col:'👗',url:'https://www.douyin.com/search/陈圆圆超可爱%20圆脸显瘦'},
+      {t:'小个显高穿搭',s:'上短下长 · 同色系延伸',col:'👗',ref:'抖音 @一一只是黑猫',bvid:'BV1w44y1q7tF',url:'https://www.bilibili.com/video/BV1w44y1q7tF'},
+      {t:'甜酷日常风',s:'扬长避短搭配思路',col:'👗',ref:'抖音 @麻辣烫',bvid:'BV15KgAzGEtP',url:'https://www.bilibili.com/video/BV15KgAzGEtP'},
+      {t:'圆脸显瘦发型妆容',s:'修饰脸型',col:'👗',ref:'抖音 @陈圆圆超可爱',bvid:'BV1Qf4y157Sx',url:'https://www.bilibili.com/video/BV1Qf4y157Sx'},
     ]
   };
 
