@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#C8473A" />
+<title>小新の随身工作台</title>
+<link rel="icon" href="assets/app-icon.png" type="image/png" />
+<link rel="apple-touch-icon" href="assets/app-icon.png" />
+<link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+<div id="app" class="app">
+  <!-- 侧边导航抽屉遮罩 -->
+  <div id="navMask" class="nav-mask" aria-hidden="true"></div>
+
+  <!-- 左侧固定纵向导航 -->
+  <aside id="nav" class="nav" aria-label="主导航">
+    <div class="nav-head">
+      <img src="assets/app-icon.png" alt="图标" class="nav-logo" />
+      <div class="nav-title">小新の<br/>随身工作台</div>
+      <button id="navClose" class="nav-close" aria-label="收起导航">‹</button>
+    </div>
+    <nav id="navList" class="nav-list"><!-- JS 注入 --></nav>
+    <div class="nav-foot">
+      <span class="leaf">🌿</span>
+      <small>自然清新 · 护眼简约</small>
+    </div>
+  </aside>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <header class="topbar">
+      <button id="navToggle" class="icon-btn" aria-label="打开导航">☰</button>
+      <div class="topbar-title" id="pageTitle">首页</div>
+      <button id="refreshBtn" class="icon-btn" aria-label="刷新">⟳</button>
+    </header>
+
+    <!-- 下拉刷新提示 -->
+    <div id="ptr" class="ptr"><span class="ptr-ico">⟳</span><span class="ptr-text">下拉刷新…</span></div>
+
+    <main id="view" class="view" tabindex="-1"><!-- 页面内容 --></main>
+  </div>
+</div>
+
+<!-- 浮动提示 -->
+<div id="toast" class="toast"></div>
+<!-- 通用模态框 -->
+<div id="modal" class="modal-mask" aria-hidden="true"><div class="modal-box" id="modalBox"></div></div>
+
+<script src="assets/utils.js"></script>
+<script src="assets/content.js"></script>
+<script src="assets/pages.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
