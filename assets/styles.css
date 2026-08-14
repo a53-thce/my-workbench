@@ -48,17 +48,21 @@ body{
 .nav-head{display:flex;align-items:center;gap:10px;padding:18px 16px 12px;position:relative;}
 .nav-logo{width:42px;height:42px;border-radius:12px;box-shadow:var(--shadow-sm);object-fit:cover;}
 .nav-title{font-size:15px;font-weight:700;line-height:1.25;color:var(--red-deep);letter-spacing:.5px;}
-.nav-close{position:absolute;right:12px;top:14px;border:none;background:transparent;font-size:22px;color:var(--ink-soft);cursor:pointer;display:none;}
-/* 折叠态：仅图标窄栏（桌面） */
-@media (min-width:521px){
-  .nav.collapsed{flex-basis:66px;width:66px;}
-  .nav.collapsed .nav-head{justify-content:center;padding:18px 6px 12px;gap:0;}
-  .nav.collapsed .nav-title,.nav.collapsed .nav-foot small{display:none;}
-  .nav.collapsed .nav-close{display:block!important;position:static;margin:0 auto 6px;font-size:20px;}
-  .nav.collapsed .nav-item{justify-content:center;gap:0;padding:11px 0;}
-  .nav.collapsed .nav-item>span:not(.ico){display:none;}
-  .nav.collapsed .nav-foot{justify-content:center;}
-}
+.nav-close{position:absolute;right:12px;top:14px;border:none;background:transparent;font-size:22px;color:var(--ink-soft);cursor:pointer;}
+/* 默认即图标窄栏（固定常驻），展开时显示图标+文字 */
+.nav{flex:0 0 var(--nav-w);width:var(--nav-w);}
+.nav.collapsed{flex-basis:64px;width:64px;}
+.nav.collapsed .nav-head{justify-content:center;padding:18px 6px 12px;gap:0;}
+.nav.collapsed .nav-title,.nav.collapsed .nav-foot small{display:none;}
+.nav.collapsed .nav-close{display:block;position:static;margin:0 auto 6px;font-size:20px;width:32px;height:32px;}
+.nav.collapsed .nav-item{justify-content:center;gap:0;padding:11px 0;}
+.nav.collapsed .nav-item>span:not(.ico){display:none;width:0;overflow:hidden;}
+.nav.collapsed .nav-foot{justify-content:center;}
+/* 展开/收起箭头 */
+.nav-close{display:block;width:30px;height:30px;flex:0 0 30px;display:flex;align-items:center;justify-content:center;border-radius:9px;}
+.nav:not(.collapsed) .nav-close{position:absolute;right:12px;top:14px;margin:0;}
+/* 窄栏时的 logo 居中 */
+.nav.collapsed .nav-logo{margin:0 auto;}
 .nav-list{flex:1;overflow-y:auto;padding:6px 10px;display:flex;flex-direction:column;gap:2px;}
 .nav-item{
   display:flex;align-items:center;gap:12px;
@@ -283,16 +287,18 @@ label.fld{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);m
 
 /* ===== 移动端响应 ===== */
 @media (max-width:520px){
-  .nav{position:fixed;top:0;bottom:0;left:0;transform:translateX(-100%);}
-  .nav.open{transform:none;}
-  .nav-close{display:block;}
+  /* 窄栏仍固定常驻，只是在小屏上略窄一些 */
+  .nav{flex-basis:var(--nav-w);width:var(--nav-w);}
+  .nav.collapsed{flex-basis:58px;width:58px;}
+  .app{display:flex;}
+  .main{height:100dvh;min-width:0;}
+  /* 展开态在窄屏作为浮层覆盖，点遮罩收起 */
+  .nav:not(.collapsed){position:fixed;top:0;bottom:0;left:0;z-index:45;width:var(--nav-w);box-shadow:4px 0 24px rgba(120,80,40,.22);}
   .nav-mask.show{opacity:1;visibility:visible;}
-  .app{display:block;}
-  .main{height:100dvh;}
+  /* 小屏默认折叠为窄栏，避免遮挡内容 */
 }
-/* 桌面/平板：导航默认展开，隐藏遮罩与汉堡 */
+/* 桌面/平板：导航默认展开，隐藏遮罩（展开态不浮层） */
 @media (min-width:521px){
-  .nav-toggle-hide{}
   .nav-mask{display:none!important;}
-  .nav-close{display:none!important;}
+  .nav:not(.collapsed){position:relative;}
 }

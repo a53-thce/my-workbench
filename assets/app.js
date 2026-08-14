@@ -40,16 +40,23 @@ const App = (() => {
 
   function go(page){render(page);}
 
-  /* 导航开合 */
-  function openNav(){$('#nav').classList.add('open');$('#navMask').classList.add('show');}
-  function closeNav(){$('#nav').classList.remove('open');$('#navMask').classList.remove('show');}
+  /* 导航折叠/展开（桌面与移动端统一逻辑）
+     - 窄栏（collapsed）= 仅图标常驻，不挡内容
+     - 展开 = 图标+文字（桌面占布局，移动端浮层+遮罩） */
   function isMobile(){return window.matchMedia('(max-width:520px)').matches;}
-  function toggleCollapse(){
-    if(isMobile()){ closeNav(); return; }
-    const nav=$('#nav');
-    const collapsed=nav.classList.toggle('collapsed');
-    U.store.set('navCollapsed',collapsed);
+  function setCollapsed(state){
+    const nav=$('#nav'),mask=$('#navMask');
+    nav.classList.toggle('collapsed',state);
+    // 移动端展开时显示遮罩（点空白收起）；桌面端不需要
+    mask.classList.toggle('show', state===false && isMobile());
+    // 箭头方向：展开态显示「‹ 收起」，窄栏态显示「› 展开」
+    const btn=$('#navClose');
+    if(btn) btn.textContent = state ? '›' : '‹';
+    U.store.set('navCollapsed',state);
   }
+  function openNav(){ setCollapsed(false); }
+  function closeNav(){ setCollapsed(true); }
+  function toggleCollapse(){ setCollapsed(!$('#nav').classList.contains('collapsed')); }
 
   /* 下拉刷新 */
   function setupPTR(){
@@ -79,13 +86,14 @@ const App = (() => {
   }
 
   function init(){
-    // 桌面端：恢复折叠偏好；移动端：默认折叠为抽屉
-    if(!isMobile()){ if(U.store.get('navCollapsed',false)) $('#nav').classList.add('collapsed'); }
+    // 手机端默认折叠为窄栏（避免遮挡内容）；桌面端默认展开，恢复折叠偏好
+    const collapsed = isMobile() ? true : U.store.get('navCollapsed',false);
+    $('#nav').classList.toggle('collapsed',collapsed);
     renderNav();
     render('home');
-    $('#navToggle').onclick=openNav;
-    $('#navClose').onclick=toggleCollapse;
-    $('#navMask').onclick=closeNav;
+    $('#navToggle').onclick=toggleCollapse;   // ☰ 切换展开/收起
+    $('#navClose').onclick=toggleCollapse;    // 折叠箭头按钮
+    $('#navMask').onclick=closeNav;          // 移动端展开态点遮罩收起
     setupPTR();
   }
 
