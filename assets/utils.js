@@ -146,5 +146,27 @@ const U = (() => {
   // 常熟默认（江苏常熟 31.65,120.75）
   const CHANGSHU={lat:31.65,lon:120.75,name:'常熟'};
 
-  return {store,todayKey,nowStr,fmtDate,pad,WK,lunar,zodiac,birthdayLeft,daysLeft,toast,openModal,closeModal,confirm,money,weather,wxText,wxEmo,CHANGSHU,springFestival};
+  // ---- 抓取 JSON（带缓存破坏与超时）----
+  async function fetchJSON(url, ms=9000){
+    try{
+      const ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
+      const t = ctrl ? setTimeout(()=>ctrl.abort(), ms) : null;
+      const r = await fetch(url+(url.includes('?')?'&':'?')+'_='+Date.now(), {signal: ctrl?ctrl.signal:undefined, cache:'no-store'});
+      if(t) clearTimeout(t);
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return await r.json();
+    }catch(e){ return null; }
+  }
+
+  // 去除 HTML 标签并解码常见实体
+  function stripHtml(s){
+    if(!s) return '';
+    return s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1')
+      .replace(/<[^>]+>/g,' ')
+      .replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+      .replace(/&quot;/g,'"').replace(/&#0?39;|&apos;/g,"'").replace(/&#x([0-9a-f]+);/gi,(m,h)=>String.fromCharCode(parseInt(h,16)))
+      .replace(/\s+/g,' ').trim();
+  }
+
+  return {store,todayKey,nowStr,fmtDate,pad,WK,lunar,zodiac,birthdayLeft,daysLeft,toast,openModal,closeModal,confirm,money,weather,wxText,wxEmo,CHANGSHU,springFestival,fetchJSON,stripHtml};
 })();

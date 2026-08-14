@@ -43,6 +43,13 @@ const App = (() => {
   /* 导航开合 */
   function openNav(){$('#nav').classList.add('open');$('#navMask').classList.add('show');}
   function closeNav(){$('#nav').classList.remove('open');$('#navMask').classList.remove('show');}
+  function isMobile(){return window.matchMedia('(max-width:520px)').matches;}
+  function toggleCollapse(){
+    if(isMobile()){ closeNav(); return; }
+    const nav=$('#nav');
+    const collapsed=nav.classList.toggle('collapsed');
+    U.store.set('navCollapsed',collapsed);
+  }
 
   /* 下拉刷新 */
   function setupPTR(){
@@ -72,10 +79,12 @@ const App = (() => {
   }
 
   function init(){
+    // 桌面端：恢复折叠偏好；移动端：默认折叠为抽屉
+    if(!isMobile()){ if(U.store.get('navCollapsed',false)) $('#nav').classList.add('collapsed'); }
     renderNav();
     render('home');
     $('#navToggle').onclick=openNav;
-    $('#navClose').onclick=closeNav;
+    $('#navClose').onclick=toggleCollapse;
     $('#navMask').onclick=closeNav;
     setupPTR();
   }

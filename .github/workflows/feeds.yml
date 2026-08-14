@@ -1,0 +1,39 @@
+name: 每日更新工作台数据源
+
+on:
+  schedule:
+    # 北京时间 09:00 = UTC 01:00（夏令时/冬令时差 1 小时，此处取 01:00，约在北京 9 点前后）
+    - cron: '3 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 设置 Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 生成新闻 / 博客数据
+        run: node scripts/build-feeds.js
+
+      - name: 提交更新
+        run: |
+          git config user.name "workbuddy-bot"
+          git config user.email "bot@workbuddy.local"
+          git add data/news.json data/blog.json data/hot.json
+          if git diff --staged --quiet; then
+            echo "无变化，跳过提交"
+          else
+            git commit -m "chore: 自动更新新闻/博客/爆款数据 $(date +'%Y-%m-%d %Z')"
+            git push
+          fi

@@ -477,20 +477,48 @@ const Pages = (() => {
 
   /* ============ 页面九：行业新闻 ============ */
   function news(){
-    const list=C.newsOfDay();
-    const html=`<div class="section-h">📰 行业新闻（每日更新）</div>
+    const html=`<div class="section-h">📰 行业新闻（每日联网更新）</div>
       <div class="tabs"><div class="tab on">时政</div><div class="tab on">财经</div><div class="tab on">消费</div></div>
-      ${list.map(n=>`<div class="news"><div class="nk">${n.c==='时政'?'🏛️':n.c==='财经'?'💹':'🛒'}</div><div class="nmain"><div class="nt">${n.t}</div><div class="ns">${n.c} · ${n.date}</div><div class="nc">${n.s}</div></div></div>`).join('')}
-      <small class="tiny muted">内容每日按日期轮换更新；如需接入实时新闻源，可在部署后配置新闻 API。</small>`;
-    return {html,init:()=>{}};
+      <div id="newsBox"><div class="empty"><div class="e">⏳</div>正在加载真实新闻…</div></div>
+      <small class="tiny muted">由 GitHub Actions 每日 9:00 抓取公开新闻源，自动更新。</small>`;
+    function init(){
+      const box=$('#newsBox');
+      U.fetchJSON('data/news.json').then(j=>{
+        if(j&&j.items&&j.items.length){
+          box.innerHTML=j.items.map(n=>`<div class="news"><div class="nk">${n.cat==='时政'?'🏛️':n.cat==='财经'?'💹':'🛒'}</div><div class="nmain"><div class="nt">${n.t}</div><div class="ns">${n.cat} · ${n.src||''} · ${n.date||''}</div><div class="nc">${n.s||''}</div></div></div>`).join('')+
+            `<small class="tiny muted">更新时间：${(j.updated||'').replace('T',' ').slice(0,16)}</small>`;
+        } else {
+          // 兜底：使用内置样例
+          box.innerHTML=C.newsOfDay().map(n=>`<div class="news"><div class="nk">${n.c==='时政'?'🏛️':n.c==='财经'?'💹':'🛒'}</div><div class="nmain"><div class="nt">${n.t}</div><div class="ns">${n.c} · 离线样例</div><div class="nc">${n.s}</div></div></div>`).join('')+
+            `<small class="tiny muted">（当前为离线样例内容）</small>`;
+        }
+      });
+    }
+    return {html,init};
   }
 
   /* ============ 页面十：博客精选 ============ */
   function blogs(){
-    const html=`<div class="section-h">🎧 博客精选（每日更新）</div>
-      ${C.BLOGS.map(b=>`<div class="news"><div class="nk">🎙️</div><div class="nmain"><div class="nt">${b.t}</div><div class="ns">${b.src} · 每周/每日更新</div><div class="nc">在对应 App（帆书 / Apple Podcasts）搜索收听。</div></div></div>`).join('')}
-      <small class="tiny muted">帆书会员新书专区 + 苹果播客：天真不天真 / 声动早咖啡 / 凹凸电波 / 搞钱女孩。</small>`;
-    return {html,init:()=>{}};
+    const html=`<div class="section-h">🎧 博客精选（真实拉取）</div>
+      <div id="blogBox"><div class="empty"><div class="e">⏳</div>正在拉取播客最新单集…</div></div>`;
+    function init(){
+      const box=$('#blogBox');
+      U.fetchJSON('data/blog.json').then(j=>{
+        if(j&&j.items&&j.items.length){
+          box.innerHTML=j.items.map(b=>`
+            <div class="news"><div class="nk">🎙️</div><div class="nmain">
+              <div class="nt">${b.t}</div>
+              <div class="ns">${b.src||''} · ${b.note||''}</div>
+              <div class="nc">最新：${b.latest||'（暂无）'}</div>
+            </div>${b.link?`<a class="btn ghost sm" href="${b.link}" target="_blank">收听</a>`:''}</div>`).join('')+
+            `<small class="tiny muted">更新时间：${(j.updated||'').replace('T',' ').slice(0,16)}</small>`;
+        } else {
+          box.innerHTML=C.BLOGS.map(b=>`<div class="news"><div class="nk">🎙️</div><div class="nmain"><div class="nt">${b.t}</div><div class="ns">${b.src} · 离线样例</div><div class="nc">在对应 App（帆书 / Apple Podcasts）搜索收听。</div></div></div>`).join('')+
+            `<small class="tiny muted">（当前为离线样例内容）</small>`;
+        }
+      });
+    }
+    return {html,init};
   }
 
   /* ============ 页面十一：备忘录 ============ */
@@ -522,20 +550,38 @@ const Pages = (() => {
 
   /* ============ 页面十三：爆款二创 ============ */
   function hot(){
-    const html=`<div class="section-h">🔥 爆款二创（每日 9:00 更新）</div>
+    const html=`<div class="section-h">🔥 爆款二创（好物分享精选）</div>
       <small class="tiny muted">抖音好物分享 · 挂车爆款短视频 · 普通人易复制。</small>
-      ${[1,2,3,4].map(i=>`<div class="vid-card"><div class="vid-thumb"><div class="play"><span>▶</span></div></div><div class="vid-body"><div class="vt">好物分享模板 #${i}</div><div class="vs">低成本 · 可挂车 · 易复制</div><div class="meta"><span class="pill">抖音</span><span class="pill">带货</span></div><div class="vid-actions"><a class="btn ghost sm" href="https://www.douyin.com" target="_blank">去抖音看</a></div></div></div>`).join('')}
-      <small class="tiny muted">演示内容；接入后将于每天 9:00 自动拉取最新爆款清单。</small>`;
-    return {html,init:()=>{}};
+      <div id="hotBox"><div class="empty"><div class="e">⏳</div>加载中…</div></div>`;
+    function init(){
+      const box=$('#hotBox');
+      U.fetchJSON('data/hot.json').then(j=>{
+        const items=(j&&j.items)||[];
+        if(items.length){
+          box.innerHTML=items.map(h=>`<div class="vid-card"><div class="vid-thumb"><div class="play"><span>▶</span></div></div><div class="vid-body"><div class="vt">${h.t}</div><div class="vs">${h.s}</div><div class="nc" style="font-size:12px;color:var(--ink-soft);margin:6px 0">💡 ${h.tip||''}</div><div class="meta"><span class="pill">抖音</span><span class="pill">带货</span></div><div class="vid-actions"><a class="btn ghost sm" href="https://www.douyin.com" target="_blank">去抖音看</a></div></div></div>`).join('')+
+            `<small class="tiny muted">${j.note||''} 更新时间：${(j.updated||'').replace('T',' ').slice(0,16)}</small>`;
+        } else {
+          box.innerHTML=`<div class="empty"><div class="e">🔥</div>暂无爆款清单</div><small class="tiny muted">抖音无公开 API，爆款清单为精选合集，需人工维护更新。</small>`;
+        }
+      });
+    }
+    return {html,init};
   }
 
   /* ============ 页面十四：新闻资讯 ============ */
   function info(){
-    const list=C.NEWS_POOL.slice(0,10);
     const html=`<div class="section-h">🌐 新闻资讯（每日 9:00 更新）</div>
-      ${list.map((n,i)=>`<div class="news"><div class="nk">${i+1}</div><div class="nmain"><div class="nt">${n.t}</div><div class="ns">${n.c} · ${U.fmtDate()}</div><div class="nc">${n.s}</div></div></div>`).join('')}
-      <small class="tiny muted">每日至少 10 条；接入实时源后自动刷新。</small>`;
-    return {html,init:()=>{}};
+      <div id="infoBox"><div class="empty"><div class="e">⏳</div>正在加载今日资讯…</div></div>`;
+    function init(){
+      const box=$('#infoBox');
+      U.fetchJSON('data/news.json').then(j=>{
+        const items=(j&&j.items)||[];
+        const list=items.length?items:C.NEWS_POOL.slice(0,10);
+        box.innerHTML=list.slice(0,12).map((n,i)=>`<div class="news"><div class="nk">${i+1}</div><div class="nmain"><div class="nt">${n.t}</div><div class="ns">${(n.cat||n.c)||''} · ${n.date||U.fmtDate()}</div><div class="nc">${n.s||''}</div></div></div>`).join('')+
+          `<small class="tiny muted">${items.length?('更新时间：'+(j.updated||'').replace('T',' ').slice(0,16)):'（当前为离线样例内容）'}</small>`;
+      });
+    }
+    return {html,init};
   }
 
   /* ============ 页面十五：天气 ============ */

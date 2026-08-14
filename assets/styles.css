@@ -49,6 +49,16 @@ body{
 .nav-logo{width:42px;height:42px;border-radius:12px;box-shadow:var(--shadow-sm);object-fit:cover;}
 .nav-title{font-size:15px;font-weight:700;line-height:1.25;color:var(--red-deep);letter-spacing:.5px;}
 .nav-close{position:absolute;right:12px;top:14px;border:none;background:transparent;font-size:22px;color:var(--ink-soft);cursor:pointer;display:none;}
+/* 折叠态：仅图标窄栏（桌面） */
+@media (min-width:521px){
+  .nav.collapsed{flex-basis:66px;width:66px;}
+  .nav.collapsed .nav-head{justify-content:center;padding:18px 6px 12px;gap:0;}
+  .nav.collapsed .nav-title,.nav.collapsed .nav-foot small{display:none;}
+  .nav.collapsed .nav-close{display:block!important;position:static;margin:0 auto 6px;font-size:20px;}
+  .nav.collapsed .nav-item{justify-content:center;gap:0;padding:11px 0;}
+  .nav.collapsed .nav-item>span:not(.ico){display:none;}
+  .nav.collapsed .nav-foot{justify-content:center;}
+}
 .nav-list{flex:1;overflow-y:auto;padding:6px 10px;display:flex;flex-direction:column;gap:2px;}
 .nav-item{
   display:flex;align-items:center;gap:12px;
