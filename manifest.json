@@ -1,0 +1,16 @@
+{
+  "name": "小新の随身工作台",
+  "short_name": "小新工作台",
+  "description": "清新简约的个人随身工作台 · 饮食/运动/学习/记账/新闻/穿搭一站式",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFDF6",
+  "theme_color": "#C8473A",
+  "icons": [
+    { "src": "./assets/app-icon.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./assets/app-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
