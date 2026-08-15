@@ -45,7 +45,7 @@ const U = (() => {
   const LUNAR_DAY1 = ['初','十','廿','卅'];
   const LUNAR_DAY2 = ['一','二','三','四','五','六','七','八','九','十'];
   const SOLAR_TERM = ['小寒','大寒','立春','雨水','惊蛰','春分','清明','谷雨','立夏','小满','芒种','夏至','小暑','大暑','立秋','处暑','白露','秋分','寒露','霜降','立冬','小雪','大雪','冬至'];
-  function lYearDays(y){let s=348;for(let i=0x8000;i>0x8;i>>=1)s+=(LUNAR_INFO[y-1900]&i)?1:0;return s;}
+  function lYearDays(y){let s=348;for(let i=0x8000;i>0x8;i>>=1)s+=(LUNAR_INFO[y-1900]&i)?1:0;return s+leapDays(y);}
   function leapMonth(y){return LUNAR_INFO[y-1900]&0xf;}
   function leapDays(y){if(leapMonth(y))return((LUNAR_INFO[y-1900]&0x10000)?30:29);return 0;}
   function monthDays(y,m){return((LUNAR_INFO[y-1900]&(0x10000>>m))?30:29);}
@@ -57,7 +57,8 @@ const U = (() => {
     let temp=0,i=1900;for(i=1900;i<2101&&offset>0;i++){temp=lYearDays(i);offset-=temp;}
     if(offset<0){offset+=temp;i--;}
     let leap=leapMonth(i),isLeap=false;
-    for(let j=1;j<13&&offset>0;j++){
+    let j=1;
+    for(;j<13&&offset>0;j++){
       if(leap>0&&j==(leap+1)&&!isLeap){isLeap=true;j--;temp=leapDays(i);}
       else{temp=monthDays(i,j);}
       if(isLeap&&j==(leap+1))isLeap=false;
