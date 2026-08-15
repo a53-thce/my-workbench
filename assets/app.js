@@ -101,3 +101,8 @@ const App = (() => {
 })();
 
 document.addEventListener('DOMContentLoaded',App.init);
+
+// 注册 Service Worker：让工作台可“添加到主屏幕”，全屏像原生 App、且可离线打开
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
+}
